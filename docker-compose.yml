@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  web:
+    build: .
+    container_name: uaa-local
+    volumes:
+      - ./env:/env
+    ports:
+      - 8080:8080
+    environment:
+      - CLOUD_FOUNDRY_CONFIG_PATH=/env
+  db:
+    image: postgres:alpine
+    container_name: uaa-db
+    environment:
+      - POSTGRES_PASSWORD=uaa
+      - POSTGRES_USER=uaa
+      - POSTGRES_DB=uaa
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - ./var:/var/lib/postgresql/data
