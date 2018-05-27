@@ -3,6 +3,9 @@ version: '3'
 services:
   web:
     image: kovaro-uaa
+    container_name: uaa-server
+    # volumes:
+      # - ./env/uaa-sample.yml:/env/uaa.yml
     ports:
       - 8080:8080
   db:

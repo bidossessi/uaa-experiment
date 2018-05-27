@@ -18,24 +18,24 @@ oauth:
   clients:
     admin:
       id: admin
-      secret: "kil234ler"
+      secret: kil234ler
       authorized-grant-types: client_credentials
       scope: none
       authorities: uaa.admin,clients.read,clients.write,clients.secret,scim.read,scim.write,clients.admin
 
 encryption:
-  active_key_label: kovaro-sig
+  active_key_label: kovaro-sig-1
   encryption_keys:
-  - label: kovaro-sig
-    passphrase: mypassphrase
+    - label: kovaro-sig-1
+      passphrase: mypassphrase
 
 login:
   branding:
     companyName: Kovaro Group
   saml:
-    activeKeyId: kovaro-saml
+    activeKeyId: kovaro-saml-1
     keys:
-       kovaro-saml:
+       kovaro-saml-1:
         key: |
           -----BEGIN RSA PRIVATE KEY-----
           MIICXQIBAAKBgQDI2gMgg8t4F4pq8qH1vdb25HDegVa+NqvpcQ4flEw94LB1Fbo3
@@ -74,8 +74,8 @@ login:
 jwt:
   token:
     policy:
-      activeKeyId: kovaro_jwt
+      activeKeyId: kovaro-jwt-1
       keys:
-        kovaro_jwt:
-          signingKey:supersecretJWTsigningKey!$#&!@$#%&PardonMyFrench
+        kovaro-jwt-1:
+          signingKey: supersecretJWTsigningKeyPardonMyFrench
 

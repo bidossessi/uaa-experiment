@@ -18,7 +18,7 @@ oauth:
   clients:
     admin:
       id: admin
-      secret: "{{ uaa_admin_client_secret }}"
+      secret: {{ uaa_admin_client_secret }}
       authorized-grant-types: client_credentials
       scope: none
       authorities: uaa.admin,clients.read,clients.write,clients.secret,scim.read,scim.write,clients.admin
@@ -26,8 +26,8 @@ oauth:
 encryption:
   active_key_label: {{ uaa_encryption_key }}
   encryption_keys:
-  - label: {{ uaa_encryption_key }}
-    passphrase: {{ uaa_encryption_passphrase }}
+    - label: {{ uaa_encryption_key }}
+      passphrase: {{ uaa_encryption_passphrase }}
 
 login:
   branding:
@@ -38,7 +38,7 @@ login:
        {{ uaa_saml_key_label }}:
         key: |
           {{ uaa_saml_key }}
-        passphrase: {{ uaa_saml_passpharse }}
+        passphrase: {{ uaa_saml_passphrase }}
         certificate: |
           {{ uaa_saml_certificate }}
 
@@ -48,5 +48,5 @@ jwt:
       activeKeyId: {{ uaa_jwt_key_label }}
       keys:
         {{ uaa_jwt_key_label }}:
-          signingKey:{{ uaa_jwt_key }}
+          signingKey: {{ uaa_jwt_key }}
 
