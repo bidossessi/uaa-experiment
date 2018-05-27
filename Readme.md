@@ -6,7 +6,30 @@
 - `gem` (to instal uaac)
 
 ## Update vars
-Update `site.yml` with the required vars, then run
+Update `site.yml` with the required vars:
+
+```yaml
+...
+  vars:
+    uaa_hostname: "http://localhost:8080/uaa"
+    uaa_admin_client_secret: "supermassivesecret"
+    uaa_db_name: "uaa"          # to match our docker postgresql container
+    uaa_db_user: "uaa"          # to match our docker postgresql container
+    uaa_db_password: "uaa"      # to match our docker postgresql container
+    uaa_db_hostname: "db"       # to match our docker postgresql container
+    uaa_encryption_key: "kovaro-sig-1"
+    uaa_encryption_passphrase: "mypassphrase"
+    uaa_saml_key_label: "kovaro-saml-1"
+    uaa_saml_key_filename: "server.key"               # generate using openssl
+    uaa_saml_passphrase: "password"
+    uaa_saml_certificate_filename: "selfsigned.crt"   # generate using openssl
+    uaa_jwt_key_label: "kovaro-jwt-1"
+    uaa_jwt_key: "supersecretJWTsigningKeyPardonMyFrench"
+    uaa_image_tag: 0.1
+```
+
+Then run
+
 
 ```bash
 $ ansible-playbook -i hosts site.yml
@@ -33,7 +56,7 @@ $ uaac target http://localhost:8080
 Target: http://localhost:8080
 Context: admin, from client admin
 
-$ uaac token client get admin -s <the password you chose in ansible>
+$ uaac token client get admin -s supermassivesecret
 
 Successfully fetched token via client credentials grant.
 Target: http://localhost:8080
