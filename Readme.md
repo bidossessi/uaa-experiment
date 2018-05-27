@@ -3,6 +3,7 @@
 ## Requirements
 - `ansible-playbook`
 - `docker-compose`
+- `gem` (to instal uaac)
 
 ## Update vars
 Update `site.yml` with the required vars, then run
