@@ -1,5 +1,8 @@
 # UAA Docker configuration
 
+## Requirements
+- `ansible-playbook`
+- `docker-compose`
 
 ## Update vars
 Update `site.yml` with the required vars, then run
