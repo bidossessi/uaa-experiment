@@ -1,0 +1,43 @@
+---
+# tasks file for roles/uaa
+- name: Read SAML key
+  shell: cat "{{ uaa_saml_key_filename }}"
+  register: command_output
+  delegate_to: localhost
+
+- name: Register SAML key
+  set_fact:
+    uaa_saml_key: "{{ command_output.stdout | indent(10, false) }}"
+
+- name: Read SAML certificate
+  shell: cat "{{ uaa_saml_certificate_filename }}"
+  register: command_output
+  delegate_to: localhost
+
+- name: Register SAML certificate
+  set_fact:
+    uaa_saml_certificate: "{{ command_output.stdout  | indent(10, false) }}"
+
+- name: Create the configuration file
+  template:
+    src: uaa.yml.j2
+    dest: env/uaa.yml
+  delegate_to: localhost
+
+- name: Remove image
+  docker_image:
+    state: absent
+    name: kovaro-uaa
+
+- name: Build the image
+  docker_image:
+     path: .
+     name: kovaro-uaa
+  # delegate_to: localhost
+
+# - name: Tag and push to local registry
+#   docker_image:
+#      name: kovaro-uaa
+#      repository: localhost:5000/kovaro-uaa
+#      tag: {{ uaa_image_tag }}
+#      push: yes

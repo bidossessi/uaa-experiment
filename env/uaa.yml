@@ -1,12 +1,6 @@
-### BOSH MANIFEST ###
-# This whole config might already be deprecated ???
-# see http://bosh.io/jobs/uaa?source=github.com/cloudfoundry/uaa-release
-
-# latest definition of mappings in this file
-# http://docs.cloudfoundry.org/api/uaa/version/4.8.0/propMappings/
-
 spring_profiles: prod,postgresql
 
+# Let's stick with PG for now
 database:
   driverClassName: org.postgresql.Driver
   url: jdbc:postgresql://db/uaa
@@ -16,93 +10,72 @@ database:
 issuer:
   uri: http://localhost:8080/uaa
 
-# I believe these will come augment the default list, but let's make sure
-scim:
-  groups:
-    kovaro.a: Do thing A in Kovaro servers
-    kovaro.b: Do thing B in Kovaro servers
-
-jwt:
-  token:
-    policy:
-      activeKeyId: key-id-1
-      keys:
-        key-id-1:
-          signingKey: SuperSecretSigningKey
-
 uaa:
   url: http://localhost:8080/uaa
-  limitedFunctionality:  # Degraded Mode? Why? Is that like Maintenance mode?
-    enabled: false
 
 # Clients bootstrap
 oauth:
   clients:
     admin:
       id: admin
-      secret: supersecret
+      secret: "kil234ler"
       authorized-grant-types: client_credentials
       scope: none
       authorities: uaa.admin,clients.read,clients.write,clients.secret,scim.read,scim.write,clients.admin
-    node1:
-      id: node1
-      secret: node1
-      authorized-grant-types: authorization_code,refresh_token,client_credentials
-      scope: openid,profile,kovaro.a
-      authorities: oauth.login
-      redirect-uri: http://localhost:3000/client/callback
 
-# https://github.com/cloudfoundry/uaa/releases/tag/4.13.0
 encryption:
-  active_key_label: kovaro-sig1
+  active_key_label: kovaro-sig
   encryption_keys:
-  - label: kovaro-sig1
+  - label: kovaro-sig
     passphrase: mypassphrase
 
 login:
   branding:
     companyName: Kovaro Group
   saml:
-    activeKeyId: kovaro-sig1
+    activeKeyId: kovaro-saml
     keys:
-      kovaro-sig1:
+       kovaro-saml:
         key: |
           -----BEGIN RSA PRIVATE KEY-----
-          MIICXQIBAAKBgQDHtC5gUXxBKpEqZTLkNvFwNGnNIkggNOwOQVNbpO0WVHIivig5
-          L39WqS9u0hnA+O7MCA/KlrAR4bXaeVVhwfUPYBKIpaaTWFQR5cTR1UFZJL/OF9vA
-          fpOwznoD66DDCnQVpbCjtDYWX+x6imxn8HCYxhMol6ZnTbSsFW6VZjFMjQIDAQAB
-          AoGAVOj2Yvuigi6wJD99AO2fgF64sYCm/BKkX3dFEw0vxTPIh58kiRP554Xt5ges
-          7ZCqL9QpqrChUikO4kJ+nB8Uq2AvaZHbpCEUmbip06IlgdA440o0r0CPo1mgNxGu
-          lhiWRN43Lruzfh9qKPhleg2dvyFGQxy5Gk6KW/t8IS4x4r0CQQD/dceBA+Ndj3Xp
-          ubHfxqNz4GTOxndc/AXAowPGpge2zpgIc7f50t8OHhG6XhsfJ0wyQEEvodDhZPYX
-          kKBnXNHzAkEAyCA76vAwuxqAd3MObhiebniAU3SnPf2u4fdL1EOm92dyFs1JxyyL
-          gu/DsjPjx6tRtn4YAalxCzmAMXFSb1qHfwJBAM3qx3z0gGKbUEWtPHcP7BNsrnWK
-          vw6By7VC8bk/ffpaP2yYspS66Le9fzbFwoDzMVVUO/dELVZyBnhqSRHoXQcCQQCe
-          A2WL8S5o7Vn19rC0GVgu3ZJlUrwiZEVLQdlrticFPXaFrn3Md82ICww3jmURaKHS
-          N+l4lnMda79eSp3OMmq9AkA0p79BvYsLshUJJnvbk76pCjR28PK4dV1gSDUEqQMB
-          qy45ptdwJLqLJCeNoR0JUcDNIRhOCuOPND7pcMtX6hI/
+          MIICXQIBAAKBgQDI2gMgg8t4F4pq8qH1vdb25HDegVa+NqvpcQ4flEw94LB1Fbo3
+          tQpd9/zl5iiY4CtcZZ28uwAbHEv2RSwodTHtir5VwSfrLF/MRjIF/bqNzvovY8cl
+          sjdCRQ7LxBQndw4Zw/RbkXYfcYVXJAnpBiv5MSnTSlQ75iBHi3Uvn8gk5QIDAQAB
+          AoGBAJdfN1wZ+A7aLwfLNSTvnkMUh7wp3iYdLhMRkYNbUNqRrGuRpHa3isinTYI2
+          pAITcJqCOw8yIDJOcTF5kH4tVSJJ4HG/V3SOeO6fcbkksN0LDP9W35q2jDqU1+aF
+          aNssP8HLM/8xHOC0tAhN5j//Swr4g2qDjJMUYIj+d9Uu2EoBAkEA/EvJUUDl/0zJ
+          wCDKrklN1t6NDaC43kckQnGPe0TINE/wwiMCc8Xjpb/VlccNENLYpOV1Dbp2GZ6W
+          f01x9Wr1nQJBAMvM4VtfFJHtn8ukd9CXzXdZ3AjdxYeGYK3ZN30O5GrS0crjnxTA
+          pNurUPMcD0MpJC2nc63YGbesP1uYq6KqLekCQQDMQ3+mrWiJHl5pkyMFoIvI3z5M
+          PkfujqKouNB1+OYulFpUk4u0uA7rbzk5noLRkCOevbfbeY+Mhn1KbCVLkWFxAkAB
+          00z1b42UnQdAYLG+CY4KkqB459ucEiUNiZOIqDh9iHPemFlVa0BOw2MPOmIcnOK5
+          EfXkSbo5Pe63WE+5PkL5AkBdd9LfS1CLww4rgQ0tHvETqKt3bntHMfy3cX6/BE2B
+          SDTLkX6hjlUzR1mDVvcZVYFvue5BqHDqQlID6ZtRNbd3
           -----END RSA PRIVATE KEY-----
         passphrase: password
         certificate: |
           -----BEGIN CERTIFICATE-----
-          MIIDSTCCArKgAwIBAgIBADANBgkqhkiG9w0BAQQFADB8MQswCQYDVQQGEwJhdzEO
-          MAwGA1UECBMFYXJ1YmExDjAMBgNVBAoTBWFydWJhMQ4wDAYDVQQHEwVhcnViYTEO
-          MAwGA1UECxMFYXJ1YmExDjAMBgNVBAMTBWFydWJhMR0wGwYJKoZIhvcNAQkBFg5h
-          cnViYUBhcnViYS5hcjAeFw0xNTExMjAyMjI2MjdaFw0xNjExMTkyMjI2MjdaMHwx
-          CzAJBgNVBAYTAmF3MQ4wDAYDVQQIEwVhcnViYTEOMAwGA1UEChMFYXJ1YmExDjAM
-          BgNVBAcTBWFydWJhMQ4wDAYDVQQLEwVhcnViYTEOMAwGA1UEAxMFYXJ1YmExHTAb
-          BgkqhkiG9w0BCQEWDmFydWJhQGFydWJhLmFyMIGfMA0GCSqGSIb3DQEBAQUAA4GN
-          ADCBiQKBgQDHtC5gUXxBKpEqZTLkNvFwNGnNIkggNOwOQVNbpO0WVHIivig5L39W
-          qS9u0hnA+O7MCA/KlrAR4bXaeVVhwfUPYBKIpaaTWFQR5cTR1UFZJL/OF9vAfpOw
-          znoD66DDCnQVpbCjtDYWX+x6imxn8HCYxhMol6ZnTbSsFW6VZjFMjQIDAQABo4Ha
-          MIHXMB0GA1UdDgQWBBTx0lDzjH/iOBnOSQaSEWQLx1syGDCBpwYDVR0jBIGfMIGc
-          gBTx0lDzjH/iOBnOSQaSEWQLx1syGKGBgKR+MHwxCzAJBgNVBAYTAmF3MQ4wDAYD
-          VQQIEwVhcnViYTEOMAwGA1UEChMFYXJ1YmExDjAMBgNVBAcTBWFydWJhMQ4wDAYD
-          VQQLEwVhcnViYTEOMAwGA1UEAxMFYXJ1YmExHTAbBgkqhkiG9w0BCQEWDmFydWJh
-          QGFydWJhLmFyggEAMAwGA1UdEwQFMAMBAf8wDQYJKoZIhvcNAQEEBQADgYEAYvBJ
-          0HOZbbHClXmGUjGs+GS+xC1FO/am2suCSYqNB9dyMXfOWiJ1+TLJk+o/YZt8vuxC
-          KdcZYgl4l/L6PxJ982SRhc83ZW2dkAZI4M0/Ud3oePe84k8jm3A7EvH5wi5hvCkK
-          RpuRBwn3Ei+jCRouxTbzKPsuCVB+1sNyxMTXzf0=
+          MIICkzCCAfwCCQDudQuzQx2ceDANBgkqhkiG9w0BAQsFADCBjTELMAkGA1UEBhMC
+          Q0ExDzANBgNVBAgMBlF1ZWJlYzEPMA0GA1UEBwwGUXVlYmVjMQ8wDQYDVQQKDAZL
+          b3Zhcm8xCzAJBgNVBAsMAklUMRIwEAYDVQQDDAlsb2NhbGhvc3QxKjAoBgkqhkiG
+          9w0BCQEWG3N0YW5pc2xhcy5zb2Rvbm9uQGtvdmFyby5jYTAeFw0xODA1MjcxNzAz
+          MjNaFw0xOTA1MjcxNzAzMjNaMIGNMQswCQYDVQQGEwJDQTEPMA0GA1UECAwGUXVl
+          YmVjMQ8wDQYDVQQHDAZRdWViZWMxDzANBgNVBAoMBktvdmFybzELMAkGA1UECwwC
+          SVQxEjAQBgNVBAMMCWxvY2FsaG9zdDEqMCgGCSqGSIb3DQEJARYbc3RhbmlzbGFz
+          LnNvZG9ub25Aa292YXJvLmNhMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDI
+          2gMgg8t4F4pq8qH1vdb25HDegVa+NqvpcQ4flEw94LB1Fbo3tQpd9/zl5iiY4Ctc
+          ZZ28uwAbHEv2RSwodTHtir5VwSfrLF/MRjIF/bqNzvovY8clsjdCRQ7LxBQndw4Z
+          w/RbkXYfcYVXJAnpBiv5MSnTSlQ75iBHi3Uvn8gk5QIDAQABMA0GCSqGSIb3DQEB
+          CwUAA4GBAHpjmce+cpogUAlgy2uoE8TpkKxfAIADUkdXegUVrK8KNzVM98/NL7NR
+          Qc7hfg4+gGe1yherOkl25/TyrkatGDGbGp4BcbxXYHTfvRuc14GayjJNPmx2zXAA
+          esacYwayhnuKXxyVRTgRCvSlCj7Rc2ZMUU7VEIPnhpH938Kl7MUG
           -----END CERTIFICATE-----
 
+jwt:
+  token:
+    policy:
+      activeKeyId: kovaro_jwt
+      keys:
+        kovaro_jwt:
+          signingKey:supersecretJWTsigningKey!$#&!@$#%&PardonMyFrench
 

@@ -11,7 +11,7 @@ const uaaAuth = new ClientOAuth2({
   clientSecret: "node2",
   accessTokenUri: "http://localhost:8080/oauth/token",
   authorizationUri: "http://localhost:8080/oauth/authorize",
-  redirectUri: "http://localhost:3001/client/callback",
+  redirectUri: "http://localhost:3001/authcode",
   scopes: ["openid", "profile", "kovaro.b"]
 })
 
@@ -21,7 +21,7 @@ app.get("/auth/uaa", (req, res) => {
   res.redirect(uri)
 })
 
-app.get("/client/callback", function (req, res) {
+app.get("/authcode", function (req, res) {
   uaaAuth.code.getToken(req.originalUrl)
     .then(function (user) {
       console.log(user) //=> { accessToken: '...', tokenType: 'bearer', ... }

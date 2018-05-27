@@ -2,31 +2,26 @@
 # vi: set ft=ruby :
 
 Vagrant.require_version ">= 1.7.0"
-BOX_IMAGE = "ubuntu/xenial64"
+# BOX_IMAGE = "ubuntu/xenial64"
+BOX_IMAGE = "ubuntu/bionic64"
+# BOX_IMAGE = "bento/ubuntu-18.04"
+
 
 Vagrant.configure("2") do |config|
-    config.vm.define "uaa" do |uaa|
-        uaa.vm.box = BOX_IMAGE
-        uaa.vm.network :private_network, ip: "192.168.33.#{50+machine_id}"
+    config.vm.define "docker" do |docker|
+        docker.vm.box = BOX_IMAGE
+        docker.vm.network :private_network, ip: "192.168.33.50"
         # CONSUL API PORT
-        uaa.vm.network :forwarded_port, guest: 8500, host: "#{8780+machine_id}"
-        # DNS port
-        uaa.vm.network :forwarded_port, guest: 8600, host: "#{8880+machine_id}", protocol: "udp"
-        uaa.vm.hostname = "consul#{machine_id}.kovaro.dev"
+        docker.vm.network :forwarded_port, guest: 8080, host: 8080
+        docker.vm.hostname = "docker.kovaro.dev"
 
-        uaa.vm.provider "virtualbox" do |vb|
+        docker.vm.provider "virtualbox" do |vb|
             vb.memory = "256"
-            vb.name = "kovaro-consul#{machine_id}"
+            vb.name = "kovaro-docker"
         end
-        if machine_id == N
-            uaa.vm.provision "ansible" do |ansible|
-                ansible.verbose = "v"
-                ansible.limit = "all"
-                ansible.playbook = "consul.yml"
-                ansible.groups = {
-                    "consul" => ["consul[1:#{CONSUL_N}]"]
-                }
-            end
+        docker.vm.provision "ansible" do |ansible|
+            ansible.verbose = "vv"
+            ansible.playbook = "docker.yml"
         end
     end
 end

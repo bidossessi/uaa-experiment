@@ -1,6 +1,12 @@
 node_modules
 .vscode
+.vagrant
 tmp/
 var/
-uaa/
+/uaa
 .DS_Store
+*.csr
+*.crt
+*.key
+*.retry
+*.log

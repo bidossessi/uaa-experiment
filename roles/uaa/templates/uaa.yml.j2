@@ -1,0 +1,52 @@
+spring_profiles: prod,postgresql
+
+# Let's stick with PG for now
+database:
+  driverClassName: org.postgresql.Driver
+  url: jdbc:postgresql://{{uaa_db_hostname}}/{{uaa_db_name}}
+  username: {{ uaa_db_user }}
+  password: {{ uaa_db_password }}
+
+issuer:
+  uri: {{ uaa_hostname }}
+
+uaa:
+  url: {{ uaa_hostname }}
+
+# Clients bootstrap
+oauth:
+  clients:
+    admin:
+      id: admin
+      secret: "{{ uaa_admin_client_secret }}"
+      authorized-grant-types: client_credentials
+      scope: none
+      authorities: uaa.admin,clients.read,clients.write,clients.secret,scim.read,scim.write,clients.admin
+
+encryption:
+  active_key_label: {{ uaa_encryption_key }}
+  encryption_keys:
+  - label: {{ uaa_encryption_key }}
+    passphrase: {{ uaa_encryption_passphrase }}
+
+login:
+  branding:
+    companyName: Kovaro Group
+  saml:
+    activeKeyId: {{ uaa_saml_key_label }}
+    keys:
+       {{ uaa_saml_key_label }}:
+        key: |
+          {{ uaa_saml_key }}
+        passphrase: {{ uaa_saml_passpharse }}
+        certificate: |
+          {{ uaa_saml_certificate }}
+
+jwt:
+  token:
+    policy:
+      activeKeyId: {{ uaa_jwt_key_label }}
+      keys:
+        {{ uaa_jwt_key_label }}:
+          signingKey:{{ uaa_jwt_key }}
+

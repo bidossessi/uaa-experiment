@@ -2,14 +2,9 @@ version: '3'
 
 services:
   web:
-    build: .
-    container_name: uaa-local
-    volumes:
-      - ./env:/env
+    image: kovaro-uaa
     ports:
       - 8080:8080
-    environment:
-      - CLOUD_FOUNDRY_CONFIG_PATH=/env
   db:
     image: postgres:alpine
     container_name: uaa-db
@@ -19,4 +14,7 @@ services:
       - POSTGRES_DB=uaa
       - PGDATA=/var/lib/postgresql/data/pgdata
     volumes:
-      - ./var:/var/lib/postgresql/data
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:

@@ -1,0 +1,21 @@
+---
+- hosts: localhost
+  roles:
+    - role: uaa
+
+  vars:
+    uaa_hostname: "http://localhost:8080/uaa"
+    uaa_admin_client_secret: "kil234ler"
+    uaa_db_name: "uaa"
+    uaa_db_user: "uaa"
+    uaa_db_password: "uaa"
+    uaa_db_hostname: "db"
+    uaa_encryption_key: "kovaro-sig"
+    uaa_encryption_passphrase: "mypassphrase"
+    uaa_saml_key_label: "kovaro-saml"
+    uaa_saml_key_filename: "server.key"
+    uaa_saml_passpharse: "password"
+    uaa_saml_certificate_filename: "selfsigned.crt"
+    uaa_jwt_key_label: "kovaro_jwt"
+    uaa_jwt_key: "supersecretJWTsigningKey!$#&!@$#%&PardonMyFrench"
+    uaa_image_tag: 0.1
