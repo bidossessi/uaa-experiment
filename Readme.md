@@ -14,8 +14,7 @@ $ ansible-playbook -i hosts site.yml
 to create the container.
 
 ## Test it out
-```bash
-```
+
 1. Install uaac
 
 ```sh
